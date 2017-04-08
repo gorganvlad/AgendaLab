@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    static String[] agendaPersoane = new String[2];  // variabila globala
+    static Person[] agendaPersoane = new Person[2];  // variabila globala
     static int index;
 
     public static void main(String[] args) {
@@ -23,8 +23,9 @@ public class Main {
             else if (optiune == 2) {
 
                 String numele = readStringConsole("Numele:");
+                String phone = readStringConsole("Numele:");
 
-                adaugare(numele);
+                adaugare(numele, phone);
             }
 
 
@@ -37,15 +38,21 @@ public class Main {
     public static void afisare() {
         System.out.println("---afisare---");
         for (int i = 0; i < agendaPersoane.length; i++) {
-            if (agendaPersoane[i] != null)
-                System.out.println(agendaPersoane[i]);
+            if (agendaPersoane[i] != null) {
+                System.out.println(agendaPersoane[i].getName());
+                System.out.println(agendaPersoane[i].getPhone());
+            }
+
         }
     }
 
-    public static void adaugare(String nume) {
+    public static void adaugare(String nume, String phone) {
+
+        Person p = new Person(nume,phone);
+
 
         if (index < agendaPersoane.length) {
-            agendaPersoane[index] = nume;
+            agendaPersoane[index] = p;
             index++;
         }
         else
@@ -53,7 +60,7 @@ public class Main {
             for (int i = 0; i < agendaPersoane.length; i++) {
                 if(agendaPersoane[i]==null)
                 {
-                    agendaPersoane[i]=nume;
+                    agendaPersoane[i]=p;
                     break;
                 }
             }
@@ -63,14 +70,31 @@ public class Main {
     }
 
 
-    public static void modificare(String vechiulNume, String noulNUme) {
+    public static void modificareN(String vechiulNume, String noulNUme) {
 
-        int gasit = cautareP(vechiulNume);
-        if (gasit != -1)
-            agendaPersoane[gasit] = noulNUme;
+        int gasit = cautareU(vechiulNume);
+        if (gasit != -1) {
+            Person temp = agendaPersoane[gasit]; // pers a carui nume a fost gasit
+            temp.setName(noulNUme);
+            agendaPersoane[gasit] = temp;
+        }
 
 
     }
+
+    public static void modificareT(String nume, String noulTelefon) {
+
+        int gasit = cautareU(nume);
+        if (gasit != -1) {
+            Person temp = agendaPersoane[gasit]; // pers a carui nume a fost gasit
+            temp.setPhone(noulTelefon);
+            agendaPersoane[gasit] = temp;
+        }
+
+
+    }
+
+
 
     public static void stergere(String nume) {
 
@@ -81,22 +105,24 @@ public class Main {
 
     }
 
-    public static void stergereToate(String nume) {
-
-        int[] gasite = cautarePozitii(nume);
-        for (int i = 0; i < gasite.length; i++) {
-            agendaPersoane[gasite[i]] = null;
-        }
-
-
-    }
+//    public static void stergereToate(String nume) {
+//
+//        int[] gasite = cautarePozitii(nume);
+//        for (int i = 0; i < gasite.length; i++) {
+//            agendaPersoane[gasite[i]] = null;
+//        }
+//
+//
+//    }
 
     public static int cautareU(String nume) {
 
         int indexFound = -1;
         for (int i = 0; i < agendaPersoane.length; i++) {
 
-            if (nume.equals(agendaPersoane[i])) {
+            Person temp = agendaPersoane[i]; // iau persoana curenta din agenda
+
+            if (nume.equals(temp.getName())) { // din obiectul curent iau numele si-l compar
                 indexFound = i;
             }
 
@@ -104,34 +130,34 @@ public class Main {
         return indexFound;
     }
 
-    public static int cautareP(String nume) {
+//    public static int cautareP(String nume) {
+//
+//        int indexFound = -1;
+//        for (int i = 0; i < agendaPersoane.length; i++) {
+//
+//            if (nume.equals(agendaPersoane[i])) {
+//                indexFound = i;
+//                break;
+//            }
+//
+//        }
+//        return indexFound;
+//    }
 
-        int indexFound = -1;
-        for (int i = 0; i < agendaPersoane.length; i++) {
-
-            if (nume.equals(agendaPersoane[i])) {
-                indexFound = i;
-                break;
-            }
-
-        }
-        return indexFound;
-    }
-
-    public static int[] cautarePozitii(String nume) {
-
-        int[] pozitiiGasite = new int[agendaPersoane.length];
-        int index=0;
-        for (int i = 0; i < agendaPersoane.length; i++) {
-
-            if (nume.equals(agendaPersoane[i])) {
-                pozitiiGasite[index]=i;
-                index++;
-            }
-
-        }
-        return pozitiiGasite;
-    }
+//    public static int[] cautarePozitii(String nume) {
+//
+//        int[] pozitiiGasite = new int[agendaPersoane.length];
+//        int index=0;
+//        for (int i = 0; i < agendaPersoane.length; i++) {
+//
+//            if (nume.equals(agendaPersoane[i])) {
+//                pozitiiGasite[index]=i;
+//                index++;
+//            }
+//
+//        }
+//        return pozitiiGasite;
+//    }
 
 
     public static int readIntConsole(String label) {
